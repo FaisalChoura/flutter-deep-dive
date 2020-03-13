@@ -47,146 +47,190 @@ class _CustomFormState extends State<CustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Text('Payment Info'),
-            TextFormField(
-              onSaved: (val) => _cardDetails.cardHolderName = val,
-              decoration: InputDecoration(
-                  labelText: 'Name on card', icon: Icon(Icons.account_circle)),
-            ),
-            TextFormField(
-              onSaved: (val) => _cardDetails.cardNumber = val,
-              autovalidate: validateField['cardField'],
-              onChanged: (value) {
-                setState(() {
-                  validateField['cardField'] = true;
-                });
-              },
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: 'Card number', icon: Icon(Icons.credit_card)),
-              validator: (value) {
-                if (value.length != 16) return "Please enter a valid number";
-              },
-            ),
-            TextFormField(
-              onSaved: (val) => _cardDetails.securityCode = int.parse(val),
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: 'Security Code', icon: Icon(Icons.credit_card)),
-            ),
-            DropdownButtonFormField<String>(
-              onSaved: (val) => _cardDetails.expiryMonth = val,
-              value: expiryMonth,
-              items: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec'
-              ].map<DropdownMenuItem<String>>(
-                (String val) {
-                  return DropdownMenuItem(
-                    child: Text(val),
-                    value: val,
-                  );
-                },
-              ).toList(),
-              onChanged: (val) {
-                setState(() {
-                  expiryMonth = val;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Expiry Month',
-                icon: Icon(Icons.calendar_today),
-              ),
-            ),
-            DropdownButtonFormField(
-              onSaved: (val) => _cardDetails.expiryYear = val.toString(),
-              value: expiryYear,
-              items: yearsList.map<DropdownMenuItem>(
-                (val) {
-                  return DropdownMenuItem(
-                    child: Text(val.toString()),
-                    value: val,
-                  );
-                },
-              ).toList(),
-              onChanged: (val) {
-                setState(() {
-                  expiryYear = val;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Expiry Year',
-                icon: Icon(Icons.calendar_today),
-              ),
-            ),
-            TypeAheadFormField(
-              textFieldConfiguration: TextFieldConfiguration(
-                decoration: InputDecoration(
-                  labelText: 'Post Code',
-                  icon: Icon(Icons.location_on),
+    return ListView(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(10.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  onSaved: (val) => _cardDetails.cardHolderName = val,
+                  decoration: InputDecoration(
+                      labelText: 'Name on card',
+                      icon: Icon(Icons.account_circle)),
                 ),
-              ),
-              suggestionsCallback: (pattern) async {
-                return await _fetchAddress(pattern);
-              },
-              itemBuilder: (context, Address address) {
-                return ListTile(
-                  leading: Icon(Icons.location_city),
-                  title: Text(address.addressLine),
-                  subtitle: Text(address.postCode),
-                );
-              },
-              onSuggestionSelected: (Address address) {
-                _addressLineController.text = address.addressLine;
-              },
-              onSaved: (val) => this._paymentAddress.postCode = val,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 4,
+                      child: TextFormField(
+                        onSaved: (val) => _cardDetails.cardNumber = val,
+                        autovalidate: validateField['cardField'],
+                        onChanged: (value) {
+                          setState(() {
+                            validateField['cardField'] = true;
+                          });
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            labelText: 'Card number',
+                            icon: Icon(Icons.credit_card)),
+                        validator: (value) {
+                          if (value.length != 16)
+                            return "Please enter a valid number";
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        width: 120.0,
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: TextFormField(
+                          onSaved: (val) =>
+                              _cardDetails.securityCode = int.parse(val),
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Security Code',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        onSaved: (val) => _cardDetails.expiryMonth = val,
+                        value: expiryMonth,
+                        items: [
+                          'Jan',
+                          'Feb',
+                          'Mar',
+                          'Apr',
+                          'May',
+                          'Jun',
+                          'Jul',
+                          'Aug',
+                          'Sep',
+                          'Oct',
+                          'Nov',
+                          'Dec'
+                        ].map<DropdownMenuItem<String>>(
+                          (String val) {
+                            return DropdownMenuItem(
+                              child: Text(val),
+                              value: val,
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            expiryMonth = val;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Expiry Month',
+                          icon: Icon(Icons.calendar_today),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: DropdownButtonFormField(
+                          onSaved: (val) =>
+                              _cardDetails.expiryYear = val.toString(),
+                          value: expiryYear,
+                          items: yearsList.map<DropdownMenuItem>(
+                            (val) {
+                              return DropdownMenuItem(
+                                child: Text(val.toString()),
+                                value: val,
+                              );
+                            },
+                          ).toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              expiryYear = val;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Expiry Year',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TypeAheadFormField(
+                  textFieldConfiguration: TextFieldConfiguration(
+                    decoration: InputDecoration(
+                      labelText: 'Post Code',
+                      icon: Icon(Icons.location_on),
+                    ),
+                  ),
+                  suggestionsCallback: (pattern) async {
+                    return await _fetchAddress(pattern);
+                  },
+                  itemBuilder: (context, Address address) {
+                    return ListTile(
+                      leading: Icon(Icons.location_city),
+                      title: Text(address.addressLine),
+                      subtitle: Text(address.postCode),
+                    );
+                  },
+                  onSuggestionSelected: (Address address) {
+                    _addressLineController.text = address.addressLine;
+                  },
+                  onSaved: (val) => this._paymentAddress.postCode = val,
+                ),
+                TextFormField(
+                  onSaved: (val) => _paymentAddress.addressLine = val,
+                  controller: _addressLineController,
+                  decoration: InputDecoration(
+                      labelText: 'Address Line',
+                      icon: Icon(Icons.location_city)),
+                ),
+                CheckboxListTile(
+                  value: rememberInfo,
+                  onChanged: (val) {
+                    setState(() {
+                      rememberInfo = val;
+                    });
+                  },
+                  title: Text('Remember Information'),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        child: Text('Process Payment'),
+                        color: Colors.pinkAccent,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+                            Payment payment = new Payment(
+                                address: _paymentAddress,
+                                cardDetails: _cardDetails);
+                            print('Saved');
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            TextFormField(
-              onSaved: (val) => _paymentAddress.addressLine = val,
-              controller: _addressLineController,
-              decoration: InputDecoration(
-                  labelText: 'Address Line', icon: Icon(Icons.location_city)),
-            ),
-            CheckboxListTile(
-              value: rememberInfo,
-              onChanged: (val) {
-                setState(() {
-                  rememberInfo = val;
-                });
-              },
-              title: Text('Remember Information'),
-            ),
-            RaisedButton(
-              child: Text('Process Payment'),
-              color: Colors.pinkAccent,
-              textColor: Colors.white,
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  Payment payment = new Payment(
-                      address: _paymentAddress, cardDetails: _cardDetails);
-                  print('Saved');
-                }
-              },
-            )
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
