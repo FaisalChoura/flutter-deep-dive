@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:deep_dive/models/models.dart';
 import 'package:deep_dive/models/payment.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -40,6 +42,7 @@ class _CustomFormState extends State<CustomForm> {
   bool rememberInfo = false;
   Address _paymentAddress = new Address();
   CardDetails _cardDetails = new CardDetails();
+  bool loading = false;
 
   final _formKey = GlobalKey<FormState>();
   final _addressLineController = TextEditingController();
@@ -210,16 +213,32 @@ class _CustomFormState extends State<CustomForm> {
                   children: <Widget>[
                     Expanded(
                       child: RaisedButton(
-                        child: Text('Process Payment'),
+                        child: loading
+                            ? SpinKitWave(
+                                color: Colors.white,
+                                size: 15.0,
+                              )
+                            : Text('Process Payment'),
                         color: Colors.pinkAccent,
                         textColor: Colors.white,
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
+                            setState(() {
+                              loading = true;
+                            });
                             _formKey.currentState.save();
-                            Payment payment = new Payment(
-                                address: _paymentAddress,
-                                cardDetails: _cardDetails);
-                            print('Saved');
+                            Timer(Duration(seconds: 4), () {
+                              Payment payment = new Payment(
+                                  address: _paymentAddress,
+                                  cardDetails: _cardDetails);
+                              setState(() {
+                                loading = false;
+                              });
+                              final snackBar =
+                                  SnackBar(content: Text('Payment Proccessed'));
+                              Scaffold.of(context).showSnackBar(snackBar);
+                              print('Saved');
+                            });
                           }
                         },
                       ),
