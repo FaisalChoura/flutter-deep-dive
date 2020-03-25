@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,22 +16,22 @@ class PaymentScreen extends StatelessWidget {
 
 class PaymentForm extends StatefulWidget {
   PaymentForm({Key key}) : super(key: key);
-
   @override
   _PaymentFormState createState() => _PaymentFormState();
 }
 
 class _PaymentFormState extends State<PaymentForm> {
   final _formKey = GlobalKey<FormState>();
-
   CardDetails _cardDetails = new CardDetails();
-  String expiryMonth;
-  String expiryYear;
-  final List yearsList = List.generate(12, (int index) => index + 2020);
+  String expiryMonth; // new line
+  String expiryYear; // new line
+  final List yearsList =
+      List.generate(12, (int index) => index + 2020); // new line
   Address _paymentAddress = new Address();
   Map<String, bool> touched = {
     "cardNumberField": false,
   };
+  final _cardNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +51,14 @@ class _PaymentFormState extends State<PaymentForm> {
             },
           ),
           TextFormField(
+            controller: _cardNumberController,
             onSaved: (val) => _cardDetails.cardNumber = val,
-            autovalidate: touched['cardNumberField'],
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: 'Card number',
               icon: Icon(Icons.credit_card),
             ),
+            autovalidate: touched['cardNumberField'],
             validator: (value) {
               if (value.isEmpty) return "This form value must be filled";
               if (value.length != 16) return "Please enter a valid number";
@@ -77,6 +77,7 @@ class _PaymentFormState extends State<PaymentForm> {
               labelText: 'Security Code',
               icon: Icon(Icons.lock_outline),
             ),
+            maxLength: 4,
           ),
           DropdownButtonFormField<String>(
             onSaved: (val) => _cardDetails.expiryMonth = val,
@@ -151,7 +152,7 @@ class _PaymentFormState extends State<PaymentForm> {
               print('Payment Complete');
             },
           ),
-        ]),
+        ]), // we will work in here
       ),
     );
   }

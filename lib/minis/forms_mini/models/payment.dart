@@ -10,7 +10,6 @@ class CardDetails {
   String expiryMonth;
   String expiryYear;
   int securityCode;
-
   CardDetails(
       {this.cardHolderName,
       this.cardNumber,

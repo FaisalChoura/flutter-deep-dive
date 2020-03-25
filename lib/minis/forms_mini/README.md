@@ -1,6 +1,6 @@
 # Flutter Forms Guide
 
-In this tutorial we will go through how to build advanced reactive forms in Flutter (Material). Here is a list of what we're going to do:
+This guide will take you through the steps on how to build advanced reactive forms in Flutter (Material). Here is a list of what we're going to do:
 - Text fields with different input types (Text, numbers, etc..) (Part 1)
 - Drop downs and check boxes (Part 1)
 - Local and server validations (Part 1)
@@ -65,7 +65,7 @@ class _PaymentFormState extends State<PaymentForm> {
 
 ## Creating our models
 
-We now need to create some models that we will be using in our form. I like placing my models in a designated folder under `lib`. So let's create a new file in `lib\models\payment.dart`
+We now need to create some models that we will be using in our form. I like placing my models in a designated folder under `lib`. So let's create a new file in `lib\models\payment.dart`. 
 
 ```dart
 class Payment {
@@ -95,6 +95,9 @@ class Address {
   Address({this.postCode, this.addressLine});
 }
 ```
+
+We need to import this file into our form widget file.
+
 __Note:__ _Please feel free to redajust the models to your liking this is just how I did it at the time if you think you can structure it better go ahead_
 
 
@@ -103,7 +106,6 @@ __Note:__ _Please feel free to redajust the models to your liking this is just h
 Let's create a __FormTextField__ for the card holder's name and get its value.
 We will discuss two ways to get data from a FormTextField. In this text field we'll use the simple appraoch which works by saving the value to an instance of __CardDetails__.
 
-let's create that instance:
 ```dart
 class _PaymentFormState extends State<PaymentForm> {
   final _formKey = GlobalKey<FormState>();
@@ -124,12 +126,12 @@ children: <Widget>[
   ),
 ]
 ```
-- __onSaved__ does not get triggered until we do it manually (we'll do that later).
+- __onSaved__ does not get triggered until we do it manually (we'll do that when we submit our form).
 - __decoration__ is used to style the input field. Here we add a label to the field and an icon.
 
 There are many more properties you can use with a TextField that you can find in the [docs](https://api.flutter.dev/flutter/material/TextField-class.html)
 
-Now let's create card number and security code text fields with a numbers only keyboard. Saving functionality will be identical to the previsuos text field.
+Now let's create card number and security code text fields with a numbers only keyboard. Security Code will have a max length of 4 digits. Saving functionality will be identical to the previsuos text field.
 
 ```dart
 // After the Card holder text field inside the widget list
@@ -148,9 +150,11 @@ TextFormField(
     labelText: 'Security Code',
     icon: Icon(Icons.lock_outline),
   ),
+  maxLength: 4,
 ),
 ```
 - __keyboadType__ lets us set the input type. In this case we use number but there are other constants such as (datetime, email address, etc..) You can read more about TextInputType in the [docs](https://api.flutter.dev/flutter/services/TextInputType-class.html)
+- __maxLength__ Sets the max length on the text field.
 
 ## Drop down fields
 
@@ -255,7 +259,7 @@ RaisedButton(
 ```
 
 ## Validation
-It is time to add some validation to our form. Let's start by validating that the fields are not empty. To do this we need to add the validator property to any of the form fields.
+Our form fields need to be validated. Let's start by validating that the fields are not empty. To do this we need to add the validator property to any of the form fields.
 
 ```dart
 validator: (value) {
@@ -268,7 +272,6 @@ validator: (value) {
 We're also going to add a card number length validation to our card number textfield
 
 ```dart
-// After the Card holder text field inside the widget list
 TextFormField(
   onSaved: (val) => _cardDetails.cardNumber = val,
   keyboardType: TextInputType.number,
@@ -326,7 +329,7 @@ onChanged: (value) {
 
 If you need to validate a field asynchronosly then you would need to do that when submiting the form because for the time being the validator property only accepts synchronos functions. You could use third party packages like [flutter_bloc](https://pub.dev/packages/flutter_form_bloc) but we won't do that in this tutorial. Let's work with async validation to validate the card number when submitting the form.
 
-We need to edit our onPressed function in our RaisedButton widget. We also need to create an instance of __TextEditingController__ for the card number field. This allows us to have better control on the text field and get the value associated to it.
+We need to edit our onPressed function in our RaisedButton widget. We also need to create a __TextEditingController__ for the card number field. This allows us to have better control on the text field and get the value associated to it.
 
 Let's add this to the top of the class
 
@@ -338,7 +341,7 @@ and then assign it to the card textfield widget
 ```dart
 controller: _cardNumberController,
 ```
-The text field should look like this now
+The Card number text field should look like this now
 
 ```dart
 TextFormField(
@@ -362,27 +365,27 @@ TextFormField(
   },
 ),
 ```
-now let's update the onPress function in our RaisedButton
+now let's update the onPressed function in our RaisedButton.
 
 ```dart
 onPressed: () async {
-  // this should be your async call
   var validCardNumber =
     await validCardNumberCheck(_cardNumberController.text);
-  // then you would need to check for it and that the form is valid before proceeding
   if (_formKey.currentState.validate() && validCardNumber) {
     _formKey.currentState.save();
     Payment payment = new Payment(
       address: _paymentAddress,
       cardDetails: _cardDetails,
     );
-    // async call to your backend to process the payment
     handlePayment(payment);
     // Use a print or a breakpoint to check that payment is saved properly
     print(payment.cardDetails.cardHolderName);
   }
 },
 ```
+- We switch the function to an async function and await for the value that's returnded from the backend call
+- The we use `_formKey.currentState.validate()` to check the state of all the validators in our form.
+- Once that passes we create our payment and make the api call to the backend to proccess it.
 
 ## Conclusion
 We have created a form with popular field options and validated it both localy and remotely. For more information about anything else I recommend the docs as they are the most up to date resource.
