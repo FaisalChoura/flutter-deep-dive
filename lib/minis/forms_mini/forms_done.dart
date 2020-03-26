@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:deep_dive/models/models.dart';
-import 'package:deep_dive/models/payment.dart';
+import 'package:deep_dive/minis/forms_mini/models/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
