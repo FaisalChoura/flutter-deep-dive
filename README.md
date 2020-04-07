@@ -3,7 +3,7 @@
 A new Flutter project.
 
 ## List of minis
-- Froms
+- ~~Froms~~
 - Provider
 - Animations
 - Testing

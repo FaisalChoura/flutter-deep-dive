@@ -4,15 +4,11 @@ This guide will take you through the steps on how to build advanced reactive for
 - Text fields with different input types (Text, numbers, etc..) (Part 1)
 - Drop downs and check boxes (Part 1)
 - Local and server validations (Part 1)
-- Type heads for local and server auto completing. (Part 2)
+- Typeaheads for local and server auto completing. (Part 2)
 - Automatic text field population (Part 2)
 - Loading indeicators and snack bars once the form is submited. (Part 2)
 
 We'll start small and build up on that. I do not want to repeat what's on the documentation I will explain anything needed for the tutorial here but if you need to look more into something the [docs](https://api.flutter.dev/) are an incredible source.
-
-Here is what you should have by the end of this tutorial:
-
-(INSERT GIF HERE)
 
 ## Getting things ready
 I'll assume you already have a flutter project created and want to add this as a widget. I like to put all my screen widgets in a folder called screens.
@@ -258,6 +254,29 @@ RaisedButton(
 ),
 ```
 
+## Check Box
+
+Adding a check box is one of the simplest form fields. We need to create a variable to keep track of the state of the checkbox.
+
+```dart
+bool rememberInfo = false;
+```
+
+then we can add the `CheckboxListTile` before our submit button.
+```dart
+CheckboxListTile(
+  value: rememberInfo,
+  onChanged: (val) {
+    setState(() {
+      rememberInfo = val;
+    });
+  },
+  title: Text('Remember Information'),
+),
+```
+- __value__ assigns the var we created to the value of the checkbox
+- __onChanged__ to reverse the boolean. You can obviously add more functionality to the function based on what the boolean is.
+
 ## Validation
 Our form fields need to be validated. Let's start by validating that the fields are not empty. To do this we need to add the validator property to any of the form fields.
 
@@ -391,3 +410,191 @@ onPressed: () async {
 We have created a form with popular field options and validated it both localy and remotely. For more information about anything else I recommend the docs as they are the most up to date resource.
 
 In Part 2 we will look into more advanced functionality to make this form more feature rich and responsive.
+
+
+# Part II
+
+Welcome back to those of you who have read part one. If you just landed here, here's a quick look of what the last guide was about and what's covered in this one.
+
+- Text fields with different input types (Text, numbers, etc..) (Part 1)
+- Drop downs and check boxes (Part 1)
+- Local and server validations (Part 1)
+- Typeaheads for local and server auto completing. (Part 2)
+- Automatic text field population (Part 2)
+- Loading indeicators and snack bars once the form is submited. (Part 2)
+
+Here's a link to [part one](https://medium.com/@faisal.choura/advanced-flutter-forms-part-1-e575422176ed).
+
+If you want to follow through with this feel free to get the `part_one` code from the [repo](https://github.com/refactord/flutter-deep-dive/tree/master/lib/minis/forms_mini)
+
+## Typeahead (auto completion)
+Let's add some auto completion to our post code form field. When a user types in the field we make a call to the backend or get a local list to suggest some options to choose from.
+
+Flutter does not support typeaheads out of the box so we're going to use a package called `flutter_typeahead`. Please add this to your pubspec file and save it.
+```
+flutter_typeahead: ^1.8.0
+```
+a newer version will probably be out by the time you read this to please get the right one from [here](https://pub.dev/packages/flutter_typeahead). Don't forget to import
+
+Now we need to replace the `TextFormField` with the `TypeAheadFormField` widget, that has all the properties of `TextFormField`.
+
+```dart
+TypeAheadFormField(
+  onSaved: (val) => _paymentAddress.postCode = val,
+  textFieldConfiguration: TextFieldConfiguration(
+    decoration: InputDecoration(
+      labelText: 'Post Code',
+      icon: Icon(Icons.location_on),
+    ),
+  ),
+  suggestionsCallback: (pattern) {},
+  itemBuilder: (context, Address address) {},
+  onSuggestionSelected: (Address address) {},
+),
+```
+- __textFieldConfiguration__ is where most of the properties that belong to to `TextFormField` are added.
+- __suggestionsCallback__ takes a function that's called when the user enters edits the field and uses the value as the argument. It returns a list of data to be used. It can be both synchronous and asynchronous.
+- __itemBuilder__ buildes a widget for each value in the list that's returned from `suggestionsCallback`
+- __onSuggestionSelected__ a call back that is called once a suggestion is tapped
+
+We should now have something that looks identical to what we had.
+
+Now let's start adding functionality to the typeahead starting with `suggestionCallback`.
+
+```dart
+suggestionsCallback: (pattern) {
+  List<Address> addresses = [
+    new Address(postCode: 'E4 9PS', addressLine: 'some address 1'),
+    new Address(postCode: 'E4 9PS', addressLine: 'some address 1.1'),
+    new Address(postCode: 'W11 1DZ', addressLine: 'some address 2'),
+    new Address(postCode: 'N1 8YF', addressLine: 'some address 3')
+  ];
+  return addresses.where((a) => a.postCode == pattern);
+},
+```
+- we create a list of addresses to search through, filter them based on the entry and return the corect list.
+
+To perform an async call you would need an async function. It would look something like this.
+
+```dart
+suggestionsCallback: (pattern) async {
+  addresses = await someApiCall(pattern);
+  // any other code
+  return addresses;
+}
+```
+once you add that, it still won't work as our item builder is empty. We're going to create a simple `ListTile` to present our address.
+
+```dart
+itemBuilder: (context, Address address) {
+  return ListTile(
+    leading: Icon(Icons.location_city),
+    title: Text(address.addressLine),
+    subtitle: Text(address.postCode),
+  );
+},
+```
+- the __itemBuilder__ takes in a function that has context and an address (or whatever type you're using) as arguments.
+- __ListTile__ is a simple way to present a list. More on it [here](https://api.flutter.dev/flutter/material/ListTile-class.html)
+
+Now you should have a working autocomplete, that does not do anything once a suggestion is chosen. Let's take a look at auto filling in the next section.
+
+## Automatic text field population (auto fill)
+
+Now let's fill the address line automatically based on what the user clicks. In order to do that we need to create a `TextEditingController`.
+
+Add this to the declarations at the top of the class
+```dart
+final _addressLineController = TextEditingController();
+```
+Now let's link our address line text field to the controller by adding the controller to our text field. It should look like this
+
+```dart
+TextFormField(
+  onSaved: (val) => _paymentAddress.addressLine = val,
+  controller: _addressLineController, // add this line
+  decoration: InputDecoration(
+    labelText: 'Address Line',
+    icon: Icon(Icons.location_city),
+  ),
+),
+```
+Now we need to fill out the `onSuggestionSelected` callback with a simple assigning line of code
+
+```dart
+onSuggestionSelected: (Address address) {
+  _addressLineController.text = address.addressLine;
+},
+```
+- We use the text property on the addressLineController to assign the address line to the text field.
+
+more on `TextEditingController` functionality [here](https://api.flutter.dev/flutter/widgets/TextEditingController-class.html)
+
+Now once the suggestion is clicked it will automatically fill in the field with the appropriate address line.
+
+## Spinner & Snack Bar
+
+To make things as close to a real world example let's finish everything up by adding a spinner and a snack bar to alert us when the payment is complete.
+
+I like using [flutter_spinkit](https://pub.dev/packages/flutter_spinkit) for spinners as they have a few option and it's very easy to integrate.
+
+Add this to you pubspec file and save (don't forget to import it).
+```yaml
+flutter_spinkit: "^4.1.2"
+```
+
+Let's add a loading boolean to our form class.
+```dart
+bool loading = false;
+```
+We also need to change the of the button to a spinner once the button is clicked
+```dart
+RaisedButton(
+  child: loading
+    ? SpinKitWave(
+        color: Colors.white,
+        size: 15.0,
+      )
+    : Text('Process Payment'),
+    //rest of the button code
+),
+```
+- We're using an inline if statement to check if loading is set to true. If it is we show our SpinKit
+- The __SpinKitWave__ is an indicator that looks like a wave and takes a color and a size.
+
+Now let's edit our onPressed functionality of the proccess payment button to enable the spinner and show the `SnackBar`. It should look like this
+```dart
+onPressed: () {
+  if (_formKey.currentState.validate()) {
+    setState(() {
+      loading = true;
+    });
+    _formKey.currentState.save();
+    Timer(Duration(seconds: 4), () {
+      Payment payment = new Payment(
+          address: _paymentAddress,
+          cardDetails: _cardDetails);
+      setState(() {
+        loading = false;
+      });
+      final snackBar =
+        SnackBar(content: Text('Payment Proccessed'));
+      Scaffold.of(context).showSnackBar(snackBar);
+      print('Saved');
+    });
+  }
+},
+```
+
+- Once the button is pressed we set the loading state to true and that triggers the spinner
+- We use a timer to mimic an async call and show the spinner for 4 seconds.
+- Once the timer is done we return the state to false and trigger the snack bar.
+
+_Notes_ 
+- `Timer` needs to be imported from `'dart:async'`
+- if you would like to show the snack bar on a different page then take a look at this [cook book](https://flutter.dev/docs/cookbook/navigation/returning-data) provided on the flutter website.
+
+## Conclusion
+We now have a fully functional real life example form, with all the major fields and a few added bells and wistles. I hope you find this helpful or it helped you figure something out. If you find anything wrong or think you can add to these posts please feel free to send me a pull request. 
+
+You can find the github version [here](https://github.com/refactord/flutter-deep-dive/tree/master/lib/minis/forms_mini)
