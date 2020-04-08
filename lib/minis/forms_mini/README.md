@@ -445,7 +445,7 @@ Flutter does not support typeaheads out of the box so we're going to use a packa
 ```
 flutter_typeahead: ^1.8.0
 ```
-a newer version will probably be out by the time you read this to please get the right one from [here](https://pub.dev/packages/flutter_typeahead). Don't forget to import
+a newer version will probably be out by the time you read this to please get the right one from [here](https://pub.dev/packages/flutter_typeahead). Don't forget to import it!
 
 Now we need to replace the `TextFormField` with the `TypeAheadFormField` widget, that has all the properties of `TextFormField`.
 
@@ -464,7 +464,7 @@ TypeAheadFormField(
 ),
 ```
 - __textFieldConfiguration__ is where most of the properties that belong to to `TextFormField` are added.
-- __suggestionsCallback__ takes a function that's called when the user enters edits the field and uses the value as the argument. It returns a list of data to be used. It can be both synchronous and asynchronous.
+- __suggestionsCallback__ takes a function that's called when the user edits the field and uses the value as the argument. It returns a list of data to be used. It can be both synchronous and asynchronous.
 - __itemBuilder__ buildes a widget for each value in the list that's returned from `suggestionsCallback`
 - __onSuggestionSelected__ a call back that is called once a suggestion is tapped
 
@@ -483,7 +483,7 @@ suggestionsCallback: (pattern) {
   return addresses.where((a) => a.postCode == pattern);
 },
 ```
-- we create a list of addresses to search through, filter them based on the entry and return the corect list.
+- We create a list of addresses to search through, filter them based on the entry and return the corect list.
 
 To perform an async call you would need an async function. It would look something like this.
 
@@ -494,7 +494,7 @@ suggestionsCallback: (pattern) async {
   return addresses;
 }
 ```
-once you add that, it still won't work as our item builder is empty. We're going to create a simple `ListTile` to present our address.
+once you add that, it still won't work as our item builder is empty. We're going to create a simple `ListTile` to present each address.
 
 ```dart
 itemBuilder: (context, Address address) {
@@ -541,7 +541,7 @@ onSuggestionSelected: (Address address) {
 
 more on `TextEditingController` functionality [here](https://api.flutter.dev/flutter/widgets/TextEditingController-class.html)
 
-Now once the suggestion is clicked it will automatically fill in the field with the appropriate address line.
+Once the suggestion is clicked it will automatically fill in the field with the appropriate address line.
 
 ## Spinner & Snack Bar
 
@@ -549,7 +549,7 @@ To make things as close to a real world example let's finish everything up by ad
 
 I like using [flutter_spinkit](https://pub.dev/packages/flutter_spinkit) for spinners as they have a few option and it's very easy to integrate.
 
-Add this to you pubspec file and save (don't forget to import it).
+Add this to you pubspec file and save. Don't forget to import it!
 ```yaml
 flutter_spinkit: "^4.1.2"
 ```

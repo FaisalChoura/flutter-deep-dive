@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:deep_dive/models/models.dart';
-import 'package:deep_dive/models/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+import 'models/payment.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({Key key}) : super(key: key);

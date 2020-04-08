@@ -22,4 +22,11 @@ class Address {
   String postCode;
   String addressLine;
   Address({this.postCode, this.addressLine});
+
+  factory Address.fromJson(Map<String, dynamic> json) {
+    return Address(
+      postCode: json['postCode'],
+      addressLine: json['address'],
+    );
+  }
 }
