@@ -199,6 +199,10 @@ class _PaymentFormState extends State<PaymentForm> {
                   decoration: InputDecoration(
                     labelText: 'Address Line',
                     icon: Icon(Icons.location_city),
+                    suffixIcon: IconButton(
+                      onPressed: () => _addressLineController.clear(),
+                      icon: Icon(Icons.clear),
+                    ),
                   ),
                 ),
                 CheckboxListTile(
