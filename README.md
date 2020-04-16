@@ -1,13 +1,12 @@
-# deep_dive
+# Flutter Deep Dive
 
-A new Flutter project.
+This will be the main repository of refacotrd project guides.
 
-## List of minis
-- ~~Froms~~
-- Provider
-- Animations
-- Testing
-- Google Maps / Places
-- Firebase
-- Image Picker
-- HTTP package
+## Projects
+
+**001-Forms:**
+
+- [Advanced Flutter Forms (Part 1)](https://medium.com/flutter-community/advanced-flutter-forms-part-1-e575422176ed)
+- [Advanced Flutter Forms (Part 2)](https://medium.com/flutter-community/advanced-flutter-forms-part-2-5ba9a759c8a1)
+
+**More Guides are coming**
