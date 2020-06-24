@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'line_chart.dart';
+import 'donut_chart.dart';
 
 void main() {
   runApp(MyApp());
@@ -40,12 +40,12 @@ class ChartsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Line Chart"),
+        title: Text("Donut Chart"),
       ),
       body: Container(
         child: SizedBox(
-          height: 200,
-          child: TimeSeriesSymbolAnnotationChart.withSampleData(),
+          height: 300,
+          child: DonutPieChart.withSampleData(),
         ),
       ),
     );
