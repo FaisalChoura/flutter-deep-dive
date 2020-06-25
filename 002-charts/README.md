@@ -7,10 +7,10 @@
 - Legend
 - Colors
 - Selection Call back
+- Title
+- Initial selection
 
 **Todo:**
 
-- Title
 - Guage
 - Labels
-- Initial selection

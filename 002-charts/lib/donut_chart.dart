@@ -24,6 +24,17 @@ class DonutPieChart extends StatelessWidget {
       animate: animate,
       defaultRenderer: new charts.ArcRendererConfig(arcWidth: 15),
       behaviors: [
+        new charts.ChartTitle(
+          "Donut Chart tutorial",
+          subTitle: "All fucntionality explained",
+          titleOutsideJustification: charts.OutsideJustification.start,
+          behaviorPosition: charts.BehaviorPosition.top,
+          innerPadding: 18,
+        ),
+        new charts.InitialSelection(selectedDataConfig: [
+          new charts.SeriesDatumConfig<String>('Purchases', 'Eating Out'),
+        ]),
+        new charts.DomainHighlighter(),
         new charts.DatumLegend(
           position: charts.BehaviorPosition.bottom,
           outsideJustification: charts.OutsideJustification.middleDrawArea,
@@ -34,7 +45,7 @@ class DonutPieChart extends StatelessWidget {
           desiredMaxRows: 2,
           legendDefaultMeasure: charts.LegendDefaultMeasure.firstValue,
           measureFormatter: (num value) {
-            return value == null ? '-' : "${value}\$";
+            return value == null ? '-' : "$value\$";
           },
           entryTextStyle: charts.TextStyleSpec(
               color: charts.MaterialPalette.black,
@@ -67,7 +78,7 @@ class DonutPieChart extends StatelessWidget {
 
     return [
       new charts.Series<Purchases, String>(
-        id: 'purchases',
+        id: 'Purchases',
         domainFn: (Purchases purchases, _) => purchases.category,
         measureFn: (Purchases purchases, _) => purchases.amount,
         data: data,
