@@ -9,8 +9,5 @@
 - Selection Call back
 - Title
 - Initial selection
-
-**Todo:**
-
 - Guage
 - Labels

@@ -44,7 +44,7 @@ class ChartsPage extends StatelessWidget {
       ),
       body: Container(
         child: SizedBox(
-          height: 300,
+          height: 400,
           child: DonutPieChart.withSampleData(),
         ),
       ),

@@ -22,7 +22,17 @@ class DonutPieChart extends StatelessWidget {
     return new charts.PieChart(
       seriesList,
       animate: animate,
-      defaultRenderer: new charts.ArcRendererConfig(arcWidth: 15),
+      // defaultRenderer: new charts.ArcRendererConfig(
+      //       arcWidth: 30, startAngle: 4 / 5 * 3.14, arcLength: 7 / 5 * 3.14),
+      defaultRenderer: new charts.ArcRendererConfig(
+        arcWidth: 15,
+        arcRendererDecorators: [
+          new charts.ArcLabelDecorator(
+              outsideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
+              insideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
+              labelPosition: charts.ArcLabelPosition.outside)
+        ],
+      ),
       behaviors: [
         new charts.ChartTitle(
           "Donut Chart tutorial",
@@ -83,6 +93,7 @@ class DonutPieChart extends StatelessWidget {
         measureFn: (Purchases purchases, _) => purchases.amount,
         data: data,
         colorFn: (Purchases purchases, _) => purchases.color,
+        labelAccessorFn: (Purchases purchases, _) => '${purchases.amount}\$',
       )
     ];
   }
