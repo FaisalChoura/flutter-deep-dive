@@ -1,7 +1,7 @@
-/// Donut chart example. This is a simple pie chart with a hole in the middle.
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
+import 'models/purchases.dart';
 
 class DonutPieChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -9,11 +9,10 @@ class DonutPieChart extends StatelessWidget {
 
   DonutPieChart(this.seriesList, {this.animate});
 
-  /// Creates a [PieChart] with sample data and no transition.
   factory DonutPieChart.withSampleData() {
     return new DonutPieChart(
-      _createSampleData(),
-      animate: false,
+      _createPurchaseData(),
+      animate: true,
     );
   }
 
@@ -22,33 +21,29 @@ class DonutPieChart extends StatelessWidget {
     return new charts.PieChart(
       seriesList,
       animate: animate,
-      // defaultRenderer: new charts.ArcRendererConfig(
-      //       arcWidth: 30, startAngle: 4 / 5 * 3.14, arcLength: 7 / 5 * 3.14),
       defaultRenderer: new charts.ArcRendererConfig(
         arcWidth: 15,
         arcRendererDecorators: [
           new charts.ArcLabelDecorator(
-              outsideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
-              insideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
-              labelPosition: charts.ArcLabelPosition.outside)
+            showLeaderLines: false,
+            outsideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
+            insideLabelStyleSpec: new charts.TextStyleSpec(fontSize: 18),
+            labelPosition: charts.ArcLabelPosition.outside,
+          )
         ],
       ),
       behaviors: [
         new charts.ChartTitle(
           "Donut Chart tutorial",
-          subTitle: "All fucntionality explained",
+          subTitle: "Major fucntionality explained",
           titleOutsideJustification: charts.OutsideJustification.start,
           behaviorPosition: charts.BehaviorPosition.top,
-          innerPadding: 18,
+          innerPadding: 24,
         ),
-        new charts.InitialSelection(selectedDataConfig: [
-          new charts.SeriesDatumConfig<String>('Purchases', 'Eating Out'),
-        ]),
-        new charts.DomainHighlighter(),
         new charts.DatumLegend(
           position: charts.BehaviorPosition.bottom,
           outsideJustification: charts.OutsideJustification.middleDrawArea,
-          horizontalFirst: true,
+          horizontalFirst: false,
           cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
           showMeasures: true,
           desiredMaxColumns: 2,
@@ -61,8 +56,11 @@ class DonutPieChart extends StatelessWidget {
               color: charts.MaterialPalette.black,
               fontFamily: 'Roboto',
               fontSize: 16),
-          // insideJustification: InsideJustification.topEnd,
         ),
+        new charts.InitialSelection(selectedDataConfig: [
+          new charts.SeriesDatumConfig<String>('Purchases', 'Eating Out'),
+        ]),
+        new charts.DomainHighlighter(),
       ],
       selectionModels: [
         new charts.SelectionModelConfig(changedListener: (selectionModel) {
@@ -77,8 +75,7 @@ class DonutPieChart extends StatelessWidget {
     );
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<Purchases, String>> _createSampleData() {
+  static List<charts.Series<Purchases, String>> _createPurchaseData() {
     final data = [
       new Purchases("Eating Out", 100, charts.Color(r: 255, g: 89, b: 100)),
       new Purchases("Groceries", 75, charts.Color(r: 89, g: 255, b: 89)),
@@ -97,11 +94,4 @@ class DonutPieChart extends StatelessWidget {
       )
     ];
   }
-}
-
-class Purchases {
-  final String category;
-  final num amount;
-  final charts.Color color;
-  Purchases(this.category, this.amount, this.color);
 }

@@ -4,10 +4,10 @@
 
 **Featured functionality:**
 
-- Legend
-- Colors
-- Selection Call back
 - Title
+- Colors
+- Labels
+- Legend
+- Selection Call back
 - Initial selection
 - Guage
-- Labels
