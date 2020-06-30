@@ -11,4 +11,6 @@ This will be the main repository of refacotrd project guides.
 
 **002-Charts:**
 
+- [Donut Charts in Flutter](refactord.com/guides/donut-charts-in-flutter)
+
 **More guides are coming**
