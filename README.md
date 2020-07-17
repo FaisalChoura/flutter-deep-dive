@@ -13,4 +13,8 @@ This will be the main repository of refacotrd project guides.
 
 - [Donut Charts in Flutter](https://refactord.com/guides/donut-charts-in-flutter)
 
+**003-Grouped Lists:**
+
+- [Create Grouped Lists in Flutter](https://refactord.com/guides/create-grouped-lists-in-flutter)
+
 **More guides are coming**
