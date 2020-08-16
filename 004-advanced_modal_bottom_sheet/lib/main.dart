@@ -29,19 +29,21 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           child: Text("New Task"),
-          onPressed: () => showModalBottomSheet(
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20.0))),
-            backgroundColor: Colors.white,
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: NewTaskScreen()),
-          ),
+          onPressed: () {
+            showModalBottomSheet(
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.0))),
+              backgroundColor: Colors.white,
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: NewTaskScreen()),
+            );
+          },
         ),
-      ),
+      ), // We will work in here
     );
   }
 }
