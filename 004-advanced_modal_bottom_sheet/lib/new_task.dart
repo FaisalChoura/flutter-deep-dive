@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'models/task.dart';
 
 class NewTaskScreen extends StatelessWidget {
-  const NewTaskScreen({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -129,6 +127,7 @@ class NewTaskFormState extends State<NewTaskForm> {
   }
 
   _submitForm(BuildContext context) {
+    // More to be added here
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       Navigator.of(context).pop();
