@@ -1,16 +1,11 @@
-# date_time_field
+# Flutter Text Field + Date Picker
 
-A new Flutter project.
+[The written guide](https://refactord.com/guides/flutter-text-field-date-picker)
 
-## Getting Started
+This project contains the source code of Flutter Text Field + Date Picker Guide
 
-This project is a starting point for a Flutter application.
+**Featured functionality:**
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Creating a simple form
+- Using Date picker and a text field jointly
+- Stopping any other unwanted behavior (keyboard trigger).
