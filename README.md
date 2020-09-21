@@ -21,4 +21,12 @@ This will be the main repository of refacotrd project guides.
 
 - [Flutter Modal Bottom Sheet](https://refactord.com/guides/flutter-modal-bottom-sheet)
 
+**005-Flutter Text Field + Date Picker:**
+
+- [Flutter Text Field + Date Picker](https://refactord.com/guides/flutter-text-field-date-picker)
+
+**006-Flutter Bottom Navigation Simplified:**
+
+- [Flutter Bottom Navigation Simplified](https://refactord.com/guides/flutter-bottom-navigation-simplified)
+
 **More guides are coming**
