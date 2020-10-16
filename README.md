@@ -31,6 +31,6 @@ This will be the main repository of refacotrd project guides.
 
 **007-Flutter Application System Manager:**
 
-- [Flutter Application System Manager](https://www.refactord.com/mission_control/posts/flutter-application-system-manager)
+- [Flutter Application System Manager](https://www.refactord.com/guides/flutter-application-system-manager)
 
 **More guides are coming**
