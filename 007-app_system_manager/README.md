@@ -1,6 +1,6 @@
 # App System Manager
 
-[The written guide](https://refactord.com/mission_control/posts/flutter-application-system-manager)
+[The written guide](https://www.refactord.com/guides/flutter-application-system-manager)
 
 This project contains the source code of App System Manager Guide
 
