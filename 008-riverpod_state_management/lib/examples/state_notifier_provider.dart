@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_state_management/models/todo.dart';
 
+// 1
 final todoListProvider = StateNotifierProvider((ref) => new TodoList());
 
 class TodoWidget extends ConsumerWidget {
@@ -9,6 +10,7 @@ class TodoWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    // 2
     final todoList = watch(todoListProvider.state);
     return Column(
       children: [
@@ -22,6 +24,7 @@ class TodoWidget extends ConsumerWidget {
                 title: Text(todoList[index].title),
                 leading: IconButton(
                   icon: Icon(Icons.edit),
+                  // 3
                   onPressed: () {
                     todo.title = 'Updated Title';
                     context.read(todoListProvider).edit(todo);
@@ -29,6 +32,7 @@ class TodoWidget extends ConsumerWidget {
                 ),
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
+                  // 3
                   onPressed: () =>
                       context.read(todoListProvider).remove(todo.id),
                 ),
@@ -37,6 +41,7 @@ class TodoWidget extends ConsumerWidget {
           ),
         ),
         RaisedButton(
+          // 3
           onPressed: () => context.read(todoListProvider).add('New Item'),
           child: Text('Add'),
         ),

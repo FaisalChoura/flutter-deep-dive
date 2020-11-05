@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_state_management/models/counter.dart';
 
+// 1
 final counterProvider = ChangeNotifierProvider<Counter>((ref) => new Counter());
 
 class CounterWidget extends ConsumerWidget {

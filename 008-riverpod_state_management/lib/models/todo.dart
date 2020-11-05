@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/all.dart';
 
+// 1
 class Todo {
   num id;
   String title;
@@ -7,14 +8,17 @@ class Todo {
   Todo({this.id, this.title, this.completed = false});
 }
 
+// 2
 class TodoList extends StateNotifier<List<Todo>> {
+  // 3
   TodoList([List<Todo> todos]) : super(todos ?? []);
 
+  // 4
   void add(String title) {
-    // state[state.length] = new Todo(id: state.length + 1, title: title);
     state = [...state, new Todo(id: state.length + 1, title: title)];
   }
 
+  // 4
   void toggle(num id) {
     state = [
       for (final todo in state)
@@ -29,6 +33,7 @@ class TodoList extends StateNotifier<List<Todo>> {
     ];
   }
 
+  // 4
   void edit(Todo updatedTodo) {
     state = [
       for (final todo in state)
@@ -43,6 +48,7 @@ class TodoList extends StateNotifier<List<Todo>> {
     ];
   }
 
+  // 4
   void remove(num id) {
     state = state.where((todo) => todo.id != id).toList();
   }
