@@ -8,5 +8,6 @@ Featured functionality:
 - Examining different provider types and how to use them.
   - Provider
   - State Provider
+  - Change Notifier Provider
   - State Notifier Provider
   - Stream Provider
