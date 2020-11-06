@@ -11,3 +11,4 @@ Featured functionality:
   - Change Notifier Provider
   - State Notifier Provider
   - Stream Provider
+  - Future Provider
