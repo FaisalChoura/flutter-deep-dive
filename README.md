@@ -35,6 +35,6 @@ This will be the main repository of refacotrd project guides.
 
 **008-Riverpod State Management:**
 
-- Guide Coming Soon
+- [Riverpod State Management Explained](https://www.refactord.com/guides/riverpod-state-management-explained)
 
 **More guides are coming**
