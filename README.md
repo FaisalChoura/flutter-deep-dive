@@ -36,5 +36,7 @@ This will be the main repository of refacotrd project guides.
 **008-Riverpod State Management:**
 
 - [Riverpod State Management Explained](https://www.refactord.com/guides/riverpod-state-management-explained)
+**009-Secure a Flutter Application**
+- [Secure a Flutter Application](https://www.refactord.com/guides/secure-a-flutter-application)
 
 **More guides are coming**
