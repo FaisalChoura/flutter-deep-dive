@@ -15,7 +15,29 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SecureItemList(),
+      home: SecureApplication(
+        nativeRemoveDelay: 500,
+        onNeedUnlock: (secure) async {
+          print(secure);
+          return null;
+        },
+        onAuthenticationFailed: () async {
+          print('auth failed');
+        },
+        onAuthenticationSucceed: () async {
+          print('auth success');
+        },
+        child: SecureGate(
+          blurr: 5,
+          child: Builder(
+            builder: (context) {
+              var valueNotifier = SecureApplicationProvider.of(context);
+              valueNotifier.secure();
+              return SecureItemList();
+            },
+          ),
+        ),
+      ),
     );
   }
 }
