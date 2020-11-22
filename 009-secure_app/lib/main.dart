@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secure_app/lifecycle_manager.dart';
 import 'package:secure_application/secure_application.dart';
 
 void main() {
@@ -6,39 +7,51 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  Route<dynamic> _generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case "/new":
+        return MaterialPageRoute(
+          builder: (context) {
+            return NewSecureItem();
+          },
+          fullscreenDialog: true,
+        );
+      default:
+        return MaterialPageRoute(builder: (context) {
+          return SecureItemList();
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: SecureApplication(
-        nativeRemoveDelay: 500,
-        onNeedUnlock: (secure) async {
-          print(secure);
-          return null;
-        },
-        onAuthenticationFailed: () async {
-          print('auth failed');
-        },
-        onAuthenticationSucceed: () async {
-          print('auth success');
-        },
-        child: SecureGate(
-          blurr: 5,
-          child: Builder(
-            builder: (context) {
-              var valueNotifier = SecureApplicationProvider.of(context);
-              valueNotifier.secure();
-              return SecureItemList();
-            },
-          ),
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-      ),
-    );
+        onGenerateRoute: _generateRoute,
+        builder: (context, child) {
+          return SecureApplication(
+              nativeRemoveDelay: 500,
+              onNeedUnlock: (secure) async {
+                print(secure);
+                return null;
+              },
+              onAuthenticationFailed: () async {
+                print('auth failed');
+              },
+              onAuthenticationSucceed: () async {
+                print('auth success');
+              },
+              child: Builder(
+                builder: (context) {
+                  SecureApplicationProvider.of(context).secure();
+                  return SecureScreen(child: child);
+                },
+              ));
+        });
   }
 }
 
@@ -62,10 +75,7 @@ class SecureItemList extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return NewSecureItem();
-        })),
+        onPressed: () => Navigator.of(context).pushNamed("/new"),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
@@ -84,6 +94,36 @@ class NewSecureItem extends StatelessWidget {
       ),
       body: Center(
         child: Text('New Secure Item'),
+      ),
+    );
+  }
+}
+
+class SecureScreen extends StatelessWidget {
+  final Widget child;
+  const SecureScreen({this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SecureGate(
+      blurr: 60,
+      opacity: 0.8,
+      lockedBuilder: (context, secureNotifier) => Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          RaisedButton(
+            child: Text('LOGIN'),
+            onPressed: () => secureNotifier.authSuccess(unlock: true),
+          ),
+          RaisedButton(
+            child: Text('FAIL AUTHENTICATION'),
+            onPressed: () => secureNotifier.authFailed(unlock: false),
+          ),
+        ],
+      )),
+      child: LifecycleManager(
+        child: child,
       ),
     );
   }
