@@ -6,10 +6,10 @@ class LifecycleManager extends StatefulWidget {
   LifecycleManager({Key key, this.child}) : super(key: key);
 
   @override
-  _LifecycleManagerState createState() => _LifecycleManagerState();
+  _LifeCycleManagerState createState() => _LifeCycleManagerState();
 }
 
-class _LifecycleManagerState extends State<LifecycleManager>
+class _LifeCycleManagerState extends State<LifecycleManager>
     with WidgetsBindingObserver {
   @override
   void initState() {

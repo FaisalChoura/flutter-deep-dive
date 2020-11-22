@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:secure_app/lifecycle_manager.dart';
 import 'package:secure_application/secure_application.dart';
+
+import 'life_cycle_manager.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,49 +10,78 @@ void main() {
 class MyApp extends StatelessWidget {
   Route<dynamic> _generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case "/new":
-        return MaterialPageRoute(
-          builder: (context) {
-            return NewSecureItem();
-          },
-          fullscreenDialog: true,
-        );
-      default:
+      case "/":
         return MaterialPageRoute(builder: (context) {
           return SecureItemList();
         });
+      case "/new":
+        return MaterialPageRoute(builder: (context) {
+          return NewSecureItem();
+        });
+      default:
+      // Some widget here
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        onGenerateRoute: _generateRoute,
-        builder: (context, child) {
-          return SecureApplication(
-              nativeRemoveDelay: 500,
-              onNeedUnlock: (secure) async {
-                print(secure);
-                return null;
-              },
-              onAuthenticationFailed: () async {
-                print('auth failed');
-              },
-              onAuthenticationSucceed: () async {
-                print('auth success');
-              },
-              child: Builder(
-                builder: (context) {
-                  SecureApplicationProvider.of(context).secure();
-                  return SecureScreen(child: child);
-                },
-              ));
-        });
+      title: 'Secure application',
+      onGenerateRoute: _generateRoute,
+      builder: (context, child) {
+        return SecureApplication(
+          // 1
+          nativeRemoveDelay: 500,
+          // 2
+          onNeedUnlock: (secure) async {
+            // Some security code here
+          },
+          // 3
+          onAuthenticationFailed: () async {
+            print('auth failed');
+          },
+          // 4
+          onAuthenticationSucceed: () async {
+            print('auth success');
+          },
+          child: Builder(
+            builder: (context) {
+              SecureApplicationProvider.of(context).secure();
+              SecureApplicationProvider.of(context).unpause();
+              return SecureGate(
+                // 1
+                blurr: 20,
+                // 2
+                opacity: 0.5,
+                // 3
+                lockedBuilder: (context, secureNotifier) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RaisedButton(
+                        child: Text('LOGIN'),
+                        onPressed: () =>
+                            // 4
+                            secureNotifier.authSuccess(unlock: true),
+                      ),
+                      RaisedButton(
+                        child: Text('FAIL AUTHENTICATION'),
+                        onPressed: () =>
+                            // 5
+                            secureNotifier.authFailed(unlock: false),
+                      ),
+                    ],
+                  ),
+                ),
+                child: LifecycleManager(
+                  child: child,
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -62,22 +92,14 @@ class SecureItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Secure Item List"),
+        title: Text("Secure Application"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Your protected things',
-            ),
-          ],
+        child: RaisedButton(
+          // This will not work for now (try when we add onGenerateRoute)
+          onPressed: () => Navigator.of(context).pushNamed("/new"),
+          child: Text("New Secure Item"),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pushNamed("/new"),
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
@@ -94,36 +116,6 @@ class NewSecureItem extends StatelessWidget {
       ),
       body: Center(
         child: Text('New Secure Item'),
-      ),
-    );
-  }
-}
-
-class SecureScreen extends StatelessWidget {
-  final Widget child;
-  const SecureScreen({this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return SecureGate(
-      blurr: 60,
-      opacity: 0.8,
-      lockedBuilder: (context, secureNotifier) => Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          RaisedButton(
-            child: Text('LOGIN'),
-            onPressed: () => secureNotifier.authSuccess(unlock: true),
-          ),
-          RaisedButton(
-            child: Text('FAIL AUTHENTICATION'),
-            onPressed: () => secureNotifier.authFailed(unlock: false),
-          ),
-        ],
-      )),
-      child: LifecycleManager(
-        child: child,
       ),
     );
   }
