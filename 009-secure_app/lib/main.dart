@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
           child: Builder(
             builder: (context) {
               SecureApplicationProvider.of(context).secure();
-              SecureApplicationProvider.of(context).unpause();
               return SecureGate(
                 // 1
                 blurr: 20,
