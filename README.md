@@ -41,4 +41,8 @@ This will be the main repository of refacotrd project guides.
 
 - [Secure a Flutter Application](https://www.refactord.com/guides/secure-a-flutter-application)
 
+**010-Hashing & Storing Passwords in Flutter**
+
+- In progress
+
 **More guides are coming**
