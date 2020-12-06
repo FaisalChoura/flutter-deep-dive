@@ -1,3 +1,4 @@
+import 'package:crypt/crypt.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Auth {
@@ -7,11 +8,12 @@ class Auth {
   }
 
   void setPassword(String uid, String password) {
-    storage.write(key: uid, value: password);
+    String hashedPassword = Crypt.sha256(password).toString();
+    storage.write(key: uid, value: hashedPassword);
   }
 
   Future<bool> checkPassword(String uid, String password) async {
-    String storedPassword = await storage.read(key: uid);
-    return Future.value(storedPassword == password);
+    String storedHashedPassword = await storage.read(key: uid);
+    return Future.value(Crypt(storedHashedPassword).match(password));
   }
 }

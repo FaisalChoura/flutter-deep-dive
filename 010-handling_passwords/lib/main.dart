@@ -93,6 +93,9 @@ class _HomeState extends State<Home> {
                 )
               ],
             ),
+            SizedBox(
+              height: 100,
+            ),
             validPass ? Text('True') : Text('False')
           ],
         ),
