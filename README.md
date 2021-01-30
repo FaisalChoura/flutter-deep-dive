@@ -45,4 +45,10 @@ This will be the main repository of refacotrd project guides.
 
 - [Hashing & Storing Passwords in Flutter](https://www.refactord.com/guides/hashing-storing-passwords-in-flutter)
 
+**011-Flutter Animate Between Two Widgets**
+
+- [Flutter Animate Between Two Widgets](https://www.refactord.com/guides/flutter-animate-between-two-widgets)
+
 **More guides are coming**
+
+
