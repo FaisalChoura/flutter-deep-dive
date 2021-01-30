@@ -29,7 +29,11 @@ class MyApp extends StatelessWidget {
 
 class AnimatedSquare extends StatefulWidget {
   final GlobalKey appBarKey;
-  AnimatedSquare({Key key, this.appBarKey}) : super(key: key);
+
+  AnimatedSquare({
+    Key key,
+    this.appBarKey,
+  }) : super(key: key);
 
   @override
   _AnimatedSquareState createState() => _AnimatedSquareState();
@@ -44,6 +48,7 @@ class _AnimatedSquareState extends State<AnimatedSquare> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 1
       _squarePosition(leftButtonKey);
     });
   }
@@ -55,6 +60,7 @@ class _AnimatedSquareState extends State<AnimatedSquare> {
     setState(() {
       // 3
       xPosition = offset.dx;
+      // We subtract the height of the appbar (skip this if you are not using an app bar)and add the height of the button in order to show the widget under the button
       yPosition = offset.dy - appBar.size.height + targetWidget.size.height;
     });
   }
@@ -65,6 +71,7 @@ class _AnimatedSquareState extends State<AnimatedSquare> {
       child: Column(
         children: [
           Stack(
+            // 1
             children: [
               Container(
                 height: 100,
@@ -87,16 +94,16 @@ class _AnimatedSquareState extends State<AnimatedSquare> {
                 ),
               ),
               AnimatedPositioned(
-                curve: Curves.decelerate,
-                duration: Duration(milliseconds: 100),
-                left: xPosition,
-                top: yPosition,
+                curve: Curves.decelerate, // 1
+                duration: Duration(milliseconds: 100), // 2
+                left: xPosition, // 3
+                top: yPosition, // 3
                 child: Container(
                   height: 10,
                   width: 10,
                   color: Colors.red,
                 ),
-              )
+              ),
             ],
           ),
         ],
