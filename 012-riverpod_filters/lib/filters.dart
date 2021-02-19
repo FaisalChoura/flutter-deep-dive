@@ -10,9 +10,11 @@ class Filters extends StatefulWidget {
 }
 
 class _FiltersState extends State<Filters> {
+  // 1
   bool _direct;
   TextEditingController priceController = new TextEditingController();
 
+  // 2
   @override
   void initState() {
     super.initState();
@@ -26,6 +28,7 @@ class _FiltersState extends State<Filters> {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
+          // 3
           child: Text(
             'Filters',
             style: TextStyle(fontSize: 24, color: Colors.white),
@@ -37,6 +40,7 @@ class _FiltersState extends State<Filters> {
         Row(
           children: [
             Checkbox(
+              // 4
               value: _direct,
               onChanged: (bool value) {
                 setState(() {
@@ -50,6 +54,7 @@ class _FiltersState extends State<Filters> {
         Padding(
           padding: EdgeInsets.only(left: 16, right: 16),
           child: TextFormField(
+            // 5
             controller: priceController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
@@ -59,6 +64,7 @@ class _FiltersState extends State<Filters> {
           ),
         ),
         ListTile(
+          // 6
           title: Text('Apply Filters'),
           onTap: () {
             context.read(priceFilterProvider).state =
@@ -68,6 +74,7 @@ class _FiltersState extends State<Filters> {
           },
         ),
         ListTile(
+          // 7
           title: Text('Clear Filters'),
           onTap: () {
             setState(() {

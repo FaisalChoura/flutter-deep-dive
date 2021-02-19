@@ -10,15 +10,17 @@ final priceFilterProvider = StateProvider<num>((_) => 0);
 
 final filteredFlights = Provider<List<Flight>>((ref) {
   final flights = ref.watch(flightsProvider);
-  final direct = ref.watch(directFilterProvider).state;
+  final direct = ref.watch(directFilterProvider).state; // 1
   final price = ref.watch(priceFilterProvider).state;
 
-  var filteredFlightsList = flights.where((flight) => flight.direct == direct);
+  var filteredFlightsList =
+      flights.where((flight) => flight.direct == direct); // 2
 
   if (price > 0) {
+    // 3
     filteredFlightsList =
         filteredFlightsList.where((flight) => flight.price < price);
   }
 
-  return filteredFlightsList.toList();
+  return filteredFlightsList.toList(); // 4
 });
