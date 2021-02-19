@@ -22,69 +22,64 @@ class _FiltersState extends State<Filters> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, watch, child) {
-      return ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text(
-              'Filters',
-              style: TextStyle(fontSize: 24, color: Colors.white),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          child: Text(
+            'Filters',
+            style: TextStyle(fontSize: 24, color: Colors.white),
           ),
-          Row(
-            children: [
-              Checkbox(
-                value: _direct,
-                onChanged: (bool value) {
-                  setState(() {
-                    _direct = value;
-                  });
-                },
-              ),
-              Text('Direct')
-            ],
+          decoration: BoxDecoration(
+            color: Colors.blue,
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 16, right: 16),
-            child: TextFormField(
-              controller: priceController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.attach_money),
-                labelText: 'Max Price',
-              ),
-              onChanged: (String value) {
-                context.read(priceFilterProvider).state = double.parse(value);
+        ),
+        Row(
+          children: [
+            Checkbox(
+              value: _direct,
+              onChanged: (bool value) {
+                setState(() {
+                  _direct = value;
+                });
               },
             ),
+            Text('Direct')
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 16, right: 16),
+          child: TextFormField(
+            controller: priceController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              icon: Icon(Icons.attach_money),
+              labelText: 'Max Price',
+            ),
           ),
-          ListTile(
-            title: Text('Apply Filters'),
-            onTap: () {
-              context.read(priceFilterProvider).state =
-                  double.parse(priceController.text);
-              context.read(directFilterProvider).state = _direct;
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text('Clear Filters'),
-            onTap: () {
-              setState(() {
-                _direct = false;
-                priceController.text = '0';
-              });
-              context.read(priceFilterProvider).state = 0;
-              context.read(directFilterProvider).state = false;
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      );
-    });
+        ),
+        ListTile(
+          title: Text('Apply Filters'),
+          onTap: () {
+            context.read(priceFilterProvider).state =
+                double.parse(priceController.text);
+            context.read(directFilterProvider).state = _direct;
+            Navigator.pop(context);
+          },
+        ),
+        ListTile(
+          title: Text('Clear Filters'),
+          onTap: () {
+            setState(() {
+              _direct = false;
+              priceController.text = '0';
+            });
+            context.read(priceFilterProvider).state = 0;
+            context.read(directFilterProvider).state = false;
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 }
