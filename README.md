@@ -49,6 +49,10 @@ This will be the main repository of refacotrd project guides.
 
 - [Flutter Animate Between Two Widgets](https://www.refactord.com/guides/flutter-animate-between-two-widgets)
 
+**012-Flutter Riverpod Filters**
+
+- [Flutter Riverpod Filters](https://www.refactord.com/guides/flutter-riverpod-filters)
+
 **More guides are coming**
 
 
