@@ -9,4 +9,9 @@ class Todo {
 
   @HiveField(1) // 2
   bool completed;
+
+  Todo({
+    this.title,
+    this.completed,
+  });
 }
