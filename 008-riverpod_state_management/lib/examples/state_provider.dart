@@ -22,12 +22,12 @@ class SelectedButton extends ConsumerWidget {
     return Column(
       children: [
         Text(selectedButton),
-        RaisedButton(
+        TextButton(
           // 5
           onPressed: () => context.read(selectedButtonProvider).state = 'red',
           child: Text('Red'),
         ),
-        RaisedButton(
+        TextButton(
           // 5
           onPressed: () => context.read(selectedButtonProvider).state = 'blue',
           child: Text('Blue'),

@@ -15,7 +15,7 @@ class CounterWidget extends ConsumerWidget {
     return Column(
       children: [
         Text(count.toString()),
-        RaisedButton(
+        TextButton(
           // 3
           onPressed: () {
             context.read(counterProvider).increment();
