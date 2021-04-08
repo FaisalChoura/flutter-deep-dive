@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // 1
 class Todo {

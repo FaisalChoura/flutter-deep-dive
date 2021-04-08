@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_state_management/models/todo.dart';
 
 // 1
-final todoListProvider = StateNotifierProvider((ref) => new TodoList());
+final todoListProvider = StateNotifierProvider<TodoList, List<Todo>>((ref) {
+  return TodoList();
+});
 
 class TodoWidget extends ConsumerWidget {
   const TodoWidget({Key key}) : super(key: key);
@@ -11,7 +13,7 @@ class TodoWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     // 2
-    final todoList = watch(todoListProvider.state);
+    final todoList = watch(todoListProvider);
     return Column(
       children: [
         Container(
@@ -27,22 +29,23 @@ class TodoWidget extends ConsumerWidget {
                   // 3
                   onPressed: () {
                     todo.title = 'Updated Title';
-                    context.read(todoListProvider).edit(todo);
+                    context.read(todoListProvider.notifier).edit(todo);
                   },
                 ),
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
                   // 3
                   onPressed: () =>
-                      context.read(todoListProvider).remove(todo.id),
+                      context.read(todoListProvider.notifier).remove(todo.id),
                 ),
               );
             },
           ),
         ),
-        RaisedButton(
+        TextButton(
           // 3
-          onPressed: () => context.read(todoListProvider).add('New Item'),
+          onPressed: () =>
+              context.read(todoListProvider.notifier).add('New Item'),
           child: Text('Add'),
         ),
       ],

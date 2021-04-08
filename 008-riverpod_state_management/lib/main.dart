@@ -33,7 +33,7 @@ class RiverpodExamples extends StatelessWidget {
         title: Text('Riverpod examples'),
       ),
       body: Center(
-        child: Column(
+        child: ListView(
           children: [
             HelloWorld(),
             SizedBox(
