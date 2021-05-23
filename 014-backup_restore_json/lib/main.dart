@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:backup_restore_json/person.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,12 +12,12 @@ void main() {
   runApp(
     MaterialApp(
       title: 'Reading and Writing Files',
-      home: FlutterDemo(storage: CounterStorage()),
+      home: FlutterDemo(storage: PersonStorage()),
     ),
   );
 }
 
-class CounterStorage {
+class PersonStorage {
   Future<String> get _localPath async {
     final directory = await getExternalStorageDirectory();
     var path = directory.path;
@@ -27,47 +29,36 @@ class CounterStorage {
     return File('$path/backup.json');
   }
 
-  Future<int> readCounter() async {
+  Future<List<Person>> readPeople() async {
     try {
       final file = await _localFile;
 
       // Read the file
-      final contents = await file.readAsString();
-
-      return int.parse(contents);
+      final jsonContents = await file.readAsString();
+      List<dynamic> jsonResponse = json.decode(jsonContents);
+      return jsonResponse.map((i) => Person.fromJson(i)).toList();
     } catch (e) {
       // If encountering an error, return 0
-      return 0;
+      return [];
     }
   }
 
-  Future<File> writeCounter(int counter) async {
-    final path = await _localPath;
-    final directory = Directory(path);
-
+  Future<File> writePeople(List<Person> people) async {
     if (!await Permission.storage.request().isGranted) {
       return Future.value(null);
     }
 
-    if (!await directory.exists()) {
-      print("write directory doesn't exists");
-      await directory.create(recursive: true);
-    }
-
     final file = await _localFile;
     if (!await file.exists()) {
-      print("write file doesn't exists");
-      print("new location ${file.path}");
       await file.create(recursive: true);
     }
-
-    // Write the file
-    return file.writeAsString('$counter');
+    String encodedPeople = jsonEncode(people);
+    return file.writeAsString(encodedPeople);
   }
 }
 
 class FlutterDemo extends StatefulWidget {
-  final CounterStorage storage;
+  final PersonStorage storage;
 
   FlutterDemo({Key key, this.storage}) : super(key: key);
 
@@ -76,41 +67,78 @@ class FlutterDemo extends StatefulWidget {
 }
 
 class _FlutterDemoState extends State<FlutterDemo> {
-  int _counter = 0;
+  List<Person> people = [];
 
   @override
   void initState() {
     super.initState();
+  }
 
-    widget.storage.readCounter().then((int value) {
-      setState(() {
-        _counter = value;
-      });
+  Future<File> addPeople() {
+    setState(() {
+      people.addAll([
+        new Person(name: 'Mark', gender: 'Male'),
+        new Person(name: 'Kate', gender: 'Female'),
+        new Person(name: 'Tyler', gender: 'Male'),
+      ]);
+    });
+
+    return widget.storage.writePeople(people);
+  }
+
+  readPeople() async {
+    var importedPeople = await widget.storage.readPeople();
+    setState(() {
+      people = importedPeople;
     });
   }
 
-  Future<File> _incrementCounter() {
+  Future<File> delete() {
     setState(() {
-      _counter++;
+      people = [];
     });
-
-    // Write the variable as a string to the file.
-    return widget.storage.writeCounter(_counter);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Reading and Writing Files')),
-      body: Center(
-        child: Text(
-          'Button tapped $_counter time${_counter == 1 ? '' : 's'}.',
+      body: Container(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () => addPeople(),
+                  child: Text('Write'),
+                ),
+                TextButton(
+                  onPressed: () => readPeople(),
+                  child: Text('Read'),
+                ),
+                TextButton(
+                  onPressed: null,
+                  child: Text('Share'),
+                ),
+                TextButton(
+                  onPressed: () => delete(),
+                  child: Text('Clear'),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: people.length,
+                  itemBuilder: (context, index) {
+                    var person = people[index];
+                    return ListTile(
+                      title: Text(person.name),
+                    );
+                  }),
+            )
+          ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
