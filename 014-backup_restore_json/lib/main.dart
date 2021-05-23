@@ -64,7 +64,7 @@ class PersonStorage {
     return file.writeAsString(encodedPeople);
   }
 
-  share() async {
+  void share() async {
     File file = await _localFile;
     Share.shareFiles([file.path], text: 'Back up');
   }
@@ -95,11 +95,6 @@ class FlutterDemo extends StatefulWidget {
 class _FlutterDemoState extends State<FlutterDemo> {
   List<Person> people = [];
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<File> addPeople() {
     setState(() {
       people.addAll([
@@ -112,21 +107,21 @@ class _FlutterDemoState extends State<FlutterDemo> {
     return widget.storage.writePeople(people);
   }
 
-  readPeople() async {
+  void readPeople() async {
     var importedPeople = await widget.storage.readPeople();
     setState(() {
       people = importedPeople;
     });
   }
 
-  readPeopleFromFilePicker() async {
+  void readPeopleFromFilePicker() async {
     var importedPeople = await widget.storage.fromFilePicker();
     setState(() {
       people = importedPeople;
     });
   }
 
-  delete() {
+  void delete() {
     setState(() {
       people = [];
     });
