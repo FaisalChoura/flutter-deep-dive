@@ -73,7 +73,7 @@ class PersonStorage {
     FilePickerResult result = await FilePicker.platform.pickFiles();
 
     if (result == null) {
-      return Future.value(null);
+      return Future.value(readPeople());
     }
 
     File file = File(result.files.single.path);
