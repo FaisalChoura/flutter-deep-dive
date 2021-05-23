@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share/share.dart';
+import 'package:file_picker/file_picker.dart';
 
 void main() {
   runApp(
@@ -29,9 +31,15 @@ class PersonStorage {
     return File('$path/backup.json');
   }
 
-  Future<List<Person>> readPeople() async {
+  Future<List<Person>> readPeople(
+      [bool local = true, File selectedFile]) async {
     try {
-      final file = await _localFile;
+      File file;
+      if (local) {
+        file = await _localFile;
+      } else {
+        file = selectedFile;
+      }
 
       // Read the file
       final jsonContents = await file.readAsString();
@@ -54,6 +62,24 @@ class PersonStorage {
     }
     String encodedPeople = jsonEncode(people);
     return file.writeAsString(encodedPeople);
+  }
+
+  share() async {
+    File file = await _localFile;
+    Share.shareFiles([file.path], text: 'Back up');
+  }
+
+  Future<List<Person>> fromFilePicker() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+
+    if (result == null) {
+      return Future.value(null);
+    }
+
+    File file = File(result.files.single.path);
+    var people = readPeople(false, file);
+    writePeople(await people);
+    return people;
   }
 }
 
@@ -93,7 +119,14 @@ class _FlutterDemoState extends State<FlutterDemo> {
     });
   }
 
-  Future<File> delete() {
+  readPeopleFromFilePicker() async {
+    var importedPeople = await widget.storage.fromFilePicker();
+    setState(() {
+      people = importedPeople;
+    });
+  }
+
+  delete() {
     setState(() {
       people = [];
     });
@@ -117,12 +150,16 @@ class _FlutterDemoState extends State<FlutterDemo> {
                   child: Text('Read'),
                 ),
                 TextButton(
-                  onPressed: null,
+                  onPressed: () => widget.storage.share(),
                   child: Text('Share'),
                 ),
                 TextButton(
                   onPressed: () => delete(),
                   child: Text('Clear'),
+                ),
+                TextButton(
+                  onPressed: () => readPeopleFromFilePicker(),
+                  child: Text('File Picker'),
                 ),
               ],
             ),
