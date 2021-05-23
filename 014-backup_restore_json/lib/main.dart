@@ -21,7 +21,7 @@ void main() {
 
 class PersonStorage {
   Future<String> get _localPath async {
-    final directory = await getExternalStorageDirectory();
+    final directory = await getApplicationDocumentsDirectory();
     var path = directory.path;
     return path;
   }
